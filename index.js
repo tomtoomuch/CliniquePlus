@@ -12,11 +12,16 @@ const users = [
 ]
 // Premier contact
 app.get('/handshake', (req, res) => {
-  res.send('Hello World!');
+    res.send('Hello World!');
 });
 
 app.get('/login', (req,res) => {
+    
     res.send('Login - TODO');
+});
+
+app.get('/admin', (req,res) => {
+
 });
 
 // On lance l'exécution du serveur - IMPORTANT, le lancement du serveur est touujours en dernier.
