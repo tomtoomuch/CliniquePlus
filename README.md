@@ -8,3 +8,12 @@ Le projet utilise :
 * SQLite
 * JSON pour les échanges API
 * Git pour le versionnement
+
+Structure du projet :
+./
+|-  .git/
+|-  node_modules/
+|-    .gitignore
+|-    README.md
+|-    index.js
+|_    package.json
