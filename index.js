@@ -29,15 +29,11 @@ bddCliniquePlus.serialize(() => {
             });
     });
 });
-// On déclare un tableau avec une BDD simulée
-/* const users = [
-    { mail: "Alice@gmail.com", id: 0, pass: "azerty" },
-    { mail: "Bob@gmail.com", id: 1, pass: "qwerty" },
-    { mail: "Charlie@gmail.com", id: 2, pass: "qwertz" },
-]; */
 
+// Déclaration de la route et du traitement des données POST
 app.post('/login', (req, res) => {
     // Récupérer les données de connexion depuis le corps de la requête
+    console.log(req);
     const { mail, password } = req.body;
     // Rechercher l'utilisateur dans la liste des utilisateurs
     console.log(users);
