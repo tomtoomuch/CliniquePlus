@@ -13,31 +13,36 @@ let bddCliniquePlus = new sqlite3.Database('./CliniquePlus.db', sqlite3.OPEN_REA
         console.log('Connecté à la base de données.');
     }
 });
-// On exécute une requête SELECT
+// On déclare un tableau que l'on va peupler localement
+let users= []; //Pensez à le vider à la fin ?
+// On exécute une requête SELECT et on peuple la liste users
 bddCliniquePlus.serialize(() => {
-    bddCliniquePlus.each(`SELECT id, mail, password, role FROM users`, (err, row) => {
+    bddCliniquePlus.each(`SELECT id, mail, password, role FROM users`, (err, ligne) => {
         if (err) {
             console.error(err.message);
         }
-        console.log(`${row.id}: ${row.mail} - ${row.role}`);
+        users.push(
+            {   id: ligne.id,
+                mail: ligne.mail,
+                password: ligne.password,
+                role: ligne.role
+            });
     });
 });
-
-
-
 // On déclare un tableau avec une BDD simulée
-const users = [
+/* const users = [
     { mail: "Alice@gmail.com", id: 0, pass: "azerty" },
     { mail: "Bob@gmail.com", id: 1, pass: "qwerty" },
     { mail: "Charlie@gmail.com", id: 2, pass: "qwertz" },
-];
+]; */
 
 app.post('/login', (req, res) => {
     // Récupérer les données de connexion depuis le corps de la requête
     const { mail, password } = req.body;
     // Rechercher l'utilisateur dans la liste des utilisateurs
+    console.log(users);
     const utilisateur =
-        users.find(user => user.mail === mail && user.pass === password);
+        users.find( (user) => user.mail === mail && user.password === password );
     // Si l'utilisateur est trouvé, retourner un succès avec son ID
     if (utilisateur) {
         return res.status(200).json({
