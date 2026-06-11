@@ -23,6 +23,8 @@ app.post('/login', (req, res) => {
     const { mail, password } = req.body;
     // On exécute une requête SELECT et on peuple la liste users
     bddCliniquePlus.serialize(() => {
+
+        //récuprer une ligne   avec mail et mdp 
         bddCliniquePlus.get(`SELECT id, mail, password, role FROM users WHERE mail = ? AND password = ?`, [mail,password], (err, ligne) => {
             if (err) {
                 console.error(err.message);
@@ -35,7 +37,8 @@ app.post('/login', (req, res) => {
                 return res.status(200).json({
                     success: true,
                     message: "Connexion validée",
-                    id: ligne.id
+                    id: ligne.id,
+                    role:ligne.role
                     });
             } else {
                 // Sinon, retourner une erreur d'authentification
