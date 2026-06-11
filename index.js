@@ -2,7 +2,7 @@ const express = require("express");
 const sqlite3 = require('sqlite3').verbose();
 const app = express();
 const userModele = require('./Modele/user.js');
-
+const patientModele = require('./Modele/patient.js')
 const router = express.Router();
 
 // On conditionne le framework pour l'usage du json
@@ -52,10 +52,36 @@ router.post('/login', (req, res) => {
 });
 
 
+router.post('/patientId', (req,res) => {
+
+    const { id } = req.body
+    console.log("id reçu : ", id)
+    patientModele.findPatientById(id, (err, patient) => {
+        console.log(patient)
+        if (err) {
+            return res.status(500).json({ success: false });
+        }
+
+        if (patient) {
+             return res.status(200).json({
+                "patient": {
+                    "id": patient.id,
+                    "nom": patient.nom,
+                    "prenom": patient.prenom,
+                    "mail": patient.mail,
+                    
+                }
+             });
+        
+        }else {
+             return res.status(404).json({"message":"Patient non trouvé"})
+        }
+
+            
+    });
+});
 
 app.use(router);
-
-
 
 // On initialise le serveur et son port d'écoute
 app.listen(3000, () => {
