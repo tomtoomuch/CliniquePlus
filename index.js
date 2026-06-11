@@ -5,48 +5,44 @@ const app = express();
 app.use(express.json());
 // On déclare une variable qui contient le port
 const port = 3000;
+let utilisateur;
 // On connecte la base de données
 let bddCliniquePlus = new sqlite3.Database('./CliniquePlus.db', sqlite3.OPEN_READONLY, (err) => {
     if(err) {
         console.error(err.message);
     } else {
         console.log('Connecté à la base de données.');
+
     }
 });
-// On déclare un tableau que l'on va peupler localement
-let users= []; //Pensez à le vider à la fin ?
-// On exécute une requête SELECT et on peuple la liste users
-bddCliniquePlus.serialize(() => {
-    bddCliniquePlus.each(`SELECT id, mail, password, role FROM users`, (err, ligne) => {
-        if (err) {
-            console.error(err.message);
-        }
-        users.push(
-            {   id: ligne.id,
-                mail: ligne.mail,
-                password: ligne.password,
-                role: ligne.role
-            });
+
+// On déclare la fonction pour interroger la BDD
+function interrogationBase (mail,password) {
+    bddCliniquePlus.serialize(() => {
+        bddCliniquePlus.get(`SELECT id, mail, password, role FROM users WHERE users.mail = '${mail}' AND users.password = '${password}';`, (err, ligne) => {
+            if (err) {
+                console.error(err.message);
+                return res.status(500); 
+            }        
+        return ligne;
+        });
     });
-});
+};
 
 // Déclaration de la route et du traitement des données POST
 app.post('/login', (req, res) => {
     // Récupérer les données de connexion depuis le corps de la requête
-    console.log(req);
+    //console.log(req);
     const { mail, password } = req.body;
-    // Rechercher l'utilisateur dans la liste des utilisateurs
-    console.log(users);
-    const utilisateur =
-        users.find( (user) => user.mail === mail && user.password === password );
+    let utilisateur = interrogationBase(mail,password);
     // Si l'utilisateur est trouvé, retourner un succès avec son ID
     if (utilisateur) {
         return res.status(200).json({
             success: true,
             message: "Connexion validée",
-            id: utilisateur.id
-        });
-    }else{
+            id: ligne.id
+            });
+    } else {
         // Sinon, retourner une erreur d'authentification
         return res.status(401).json({
             success: false,
