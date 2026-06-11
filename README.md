@@ -10,6 +10,7 @@ Le projet utilise :
 * Git pour le versionnement
 
 Structure du projet :
+```
 ./
 |-  .git/
 |-  node_modules/
@@ -17,3 +18,4 @@ Structure du projet :
 |-    README.md
 |-    index.js
 |_    package.json
+```
