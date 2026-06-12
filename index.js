@@ -1,30 +1,69 @@
 const express = require("express");
-const sqlite3 = require("sqlite3").verbose();
-const connexion = require("./data/connexionBdd.js");
-const router = require("router");
+
+const connexion = require("./data/connexionBdd");
+const userModel = require("./models/modeleUtilisateurs");
+const controllers = require("./controllers/controleurUtilisateurs");
+const router = require("./routes/routeurUtilisateurs");
+
 const app = express();
+
 // On conditionne le framework pour l'usage du json
 app.use(express.json());
 // On déclare une variable qui contient le port
 const port = 3000;
 
 
-app.post('/login', (req, res) => {
+router.post('/login', (req, res) => {
+    
     const { mail, password } = req.body;
-    const found = finUserWithMailAndPass(mail,password);
-    if (found) {
-        return res.status(200).json({
-            success: true,
-            message: "Connexion validée",
-            id: found.id,
-            role: found.role
-        });
-    } else {
+    
+    console.log(mail,password);
+    
+    userModel.findUserWithMailAndPass(mail,password, (err,user) => {
+    
+        if (err) {
+    
+            return res.status(500).json({ success: false });
+    
+        }
+
+        if (user) {
+    
+            return res.status(200).json({
+    
+                success: true,
+    
+                message: "Connexion validée",
+    
+                id: user.id,
+    
+                role: user.role
+    
+            });
+
+        return res.redirect([301] `./${user.role}`);
+
+        }
+    
         return res.status(401).json({
+    
             success: false,
+    
             message: "Connexion refusée"
+    
         });
-    };        
+
+    });
+
+
+});
+
+router.get('/patients', (req,res) => {
+    
+});
+
+router.get('/medecins', (req,res) => {
+    
 });
     
 

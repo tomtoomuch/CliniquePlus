@@ -1,9 +1,16 @@
-export default function findUserWithMailAndPass(mail,password) { 
-bddCliniquePlus.get(`SELECT id, mail, password, role FROM users WHERE mail = ? AND password = ?`, [mail,password], (err, ligne) => {
-            if (err) {
-                console.error(err.message);
-                return res.status(500); 
-            });
-};
+const {bddCliniquePlus} = require('../data/connexionBdd');
 
-//module.exports = {};
+function findUserWithMailAndPass(mail,password, callback) { 
+    bddCliniquePlus.get(
+        `SELECT id, mail, password, role FROM users WHERE mail = ? AND password = ?`,
+        [mail,password],
+        (err, row) => {
+        if (err) {
+            return callback(err,null);
+        }
+        return callback(null,row);
+        }
+    );
+}
+
+module.exports = { findUserWithMailAndPass };

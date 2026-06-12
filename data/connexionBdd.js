@@ -1,5 +1,5 @@
-const sqlite = require("sqlite3");
-let bddCliniquePlus = new sqlite3.Database('./CliniquePlus.db', sqlite3.OPEN_READONLY, (err) => {
+const sqlite3 = require("sqlite3");
+let bddCliniquePlus = new sqlite3.Database('./data/CliniquePlus.db', sqlite3.OPEN_READONLY, (err) => {
     if(err) {
         console.error(err.message);
     } else {
@@ -7,4 +7,4 @@ let bddCliniquePlus = new sqlite3.Database('./CliniquePlus.db', sqlite3.OPEN_REA
     }
 });
 
-module.epxorts = { bddCliniquePlus };
+module.exports = { bddCliniquePlus };
