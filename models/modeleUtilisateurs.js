@@ -13,4 +13,20 @@ function findUserWithMailAndPass(mail,password, callback) {
     );
 }
 
-module.exports = { findUserWithMailAndPass };
+function findPatientWithId(id, callback) { 
+    bddCliniquePlus.get(
+        `SELECT idPatient, nomPatient, prenomPatient, mail, nirPatient, servicePatieent FROM patients WHERE idPatient = ?`,
+        [id],
+        (err, row) => {
+        if (err) {
+            return callback(err,null);
+        }
+        return callback(null,row);
+        }
+    );
+}
+
+module.exports = { 
+    findUserWithMailAndPass,
+    findPatientWithId
+};
